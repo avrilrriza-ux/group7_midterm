@@ -1,38 +1,393 @@
-.App {
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #d8b28a;
+  color: #8c6446;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+/* HERO */
+.hero {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #fff8ef;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 5;
+}
+
+.brand {
+  font-size: 24px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 14px;
+  padding: 0;
+  margin: 0;
+  font-size: 11px;
+}
+
+.hero-content {
+  position: relative;
+  min-height: 520px;
+}
+
+.hero-text {
+  position: absolute;
+  z-index: 4;
+  left: 30px;
+  bottom: 48px;
+  width: min(520px, 85%);
+  color: #fffdf7;
+}
+
+.hero-text h1 {
+  margin: 0 0 12px;
+  font-size: 46px;
+  line-height: 1.08;
+}
+
+.hero-text p {
+  margin: 0 0 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #fdf6ea;
+}
+
+.main-btn {
+  border: none;
+  background: #f7e6c9;
+  color: #8c6446;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.main-btn:hover {
+  transform: translateY(-2px);
+}
+
+.hero-image-wrap {
+  width: 100%;
+  height: 540px;
+  position: relative;
+}
+
+.hero-image-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(70, 48, 25, 0.55) 0%,
+    rgba(70, 48, 25, 0.22) 35%,
+    rgba(70, 48, 25, 0.08) 100%
+  );
+}
+
+.hero-image {
+  width: 100%;
+  height: 680px;
+  object-fit: cover;
+  display: block;
+  padding-top: 0px;
+}
+
+/* CATEGORIES */
+.categories-section {
+  padding: 34px 20px 28px;
+  text-align: center;
+  background: #f4efe7;
+}
+
+.categories-section h2 {
+  margin: 0 0 8px;
+  font-size: 36px;
+  color: #a1734f;
+}
+
+.categories-section p {
+  margin: 0 0 24px;
+  color: #b08c6e;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 360px));
+  justify-content: center;
+  gap: 24px;
+}
+
+.category-card {
+  position: relative;
+  height: 260px;
+  border-radius: 22px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(129, 88, 53, 0.15);
+  transition: 0.2s ease;
+  background: #fff;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+}
+
+.active-category-card {
+  outline: 3px solid #b8885f;
+}
+
+.category-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.8);
+}
+
+.category-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  padding: 18px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.45),
+    rgba(0, 0, 0, 0.05)
+  );
+}
+
+.category-overlay h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 28px;
+}
+
+/* ANIMALS */
+.animals-section {
+  padding: 28px 20px 42px;
+  background: #fbf4e8;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.animals-section h2 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  color: #9c714e;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.animals-section p {
+  margin: 0 0 24px;
+  color: #af8967;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.search-wrap {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  margin: 0 0 24px;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 420px;
+  padding: 12px 16px;
+  border: 1px solid #d4b08a;
+  border-radius: 999px;
+  outline: none;
+  font-size: 14px;
+  background: #fffdf8;
+  color: #8c6446;
+}
+
+.search-input::placeholder {
+  color: #b08c6e;
+}
+
+.status-text,
+.error-text {
+  font-size: 16px;
+}
+
+.error-text {
+  color: #a33d3d;
+}
+
+.animals-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.animal-card {
+  background: #fffdf8;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(129, 88, 53, 0.1);
+  text-align: left;
+  transition: 0.2s ease;
+}
+
+.animal-card:hover {
+  transform: translateY(-4px);
+}
+
+.animal-image-wrap {
+  width: 100%;
+  height: 220px;
+  background: #f2e8d8;
+}
+
+.animal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.animal-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 16px;
+  text-align: center;
+  color: #9b734d;
+  font-weight: 600;
+  background: linear-gradient(135deg, #f5ead8, #ead8bc);
 }
 
-.App-link {
-  color: #61dafb;
+.animal-card-body {
+  padding: 14px 16px 18px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.animal-card-body h3 {
+  margin: 0;
+  color: #946948;
+  font-size: 20px;
+}
+
+/* PAGINATION */
+.pagination {
+  margin-top: 28px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.page-btn {
+  border: none;
+  background: #fffaf3;
+  color: #9b734d;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(129, 88, 53, 0.08);
+  font-weight: 600;
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.active-page-btn {
+  background: #f3dfbf;
+  outline: 2px solid #b8885f;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .hero-text h1 {
+    font-size: 34px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .category-grid {
+    grid-template-columns: 1fr;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .animals-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    left: 14px;
+    top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .nav-links {
+    gap: 10px;
+    font-size: 10px;
+    flex-wrap: wrap;
+  }
+
+  .hero-content {
+    min-height: 430px;
+  }
+
+  .hero-image-wrap {
+    height: 430px;
+  }
+
+  .hero-text {
+    left: 18px;
+    bottom: 30px;
+    width: 88%;
+  }
+
+  .hero-text h1 {
+    font-size: 28px;
+  }
+
+  .hero-text p {
+    font-size: 12px;
+  }
+
+  .categories-section h2,
+  .animals-section h2 {
+    font-size: 28px;
+  }
+
+  .category-card {
+    height: 220px;
+  }
+
+  .animals-grid {
+    grid-template-columns: 1fr;
   }
 }
