@@ -5,18 +5,22 @@ import AnimalDetails from "./pages/AnimalDetails";
 import FunFactsPage from "./pages/FunFactsPage";
 import GamesPage from "./pages/GamesPage";
 import FavoritesPage from "./pages/FavoritesPage";
+import { useSelector } from "react-redux";
 
 function App() {
   const [activePage, setActivePage] = useState("home");
-function scrollToSection(id) {
-  const section = document.getElementById(id);
+  const favoriteCount = useSelector((state) => state.favorites.items.length);
 
-  if (section) {
-    section.scrollIntoView({
-      behavior: "smooth"
-    });
+  function scrollToSection(id) {
+    const section = document.getElementById(id);
+
+    if (section) {
+      section.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
   }
-}
+
   return (
     <div className="app">
       <nav className="navbar">
@@ -24,57 +28,61 @@ function scrollToSection(id) {
           🐾
         </div>
 
-<ul className="nav-links">
-  <li
-    onClick={() => {
-      setActivePage("home");
-      setTimeout(() => scrollToSection("hero"), 100);
-    }}
-  >
-    Home
-  </li>
+        <ul className="nav-links">
+          <li
+            onClick={() => {
+              setActivePage("home");
+              setTimeout(() => scrollToSection("hero"), 100);
+            }}
+          >
+            Home
+          </li>
 
-  <li
-    onClick={() => {
-      setActivePage("home");
-      setTimeout(() => scrollToSection("categories-section"), 100);
-    }}
-  >
-    Categories
-  </li>
+          <li
+            onClick={() => {
+              setActivePage("home");
+              setTimeout(() => scrollToSection("categories-section"), 100);
+            }}
+          >
+            Categories
+          </li>
 
-  <li
-    onClick={() => {
-      setActivePage("home");
-      setTimeout(() => scrollToSection("animals-section"), 100);
-    }}
-  >
-    Animals
-  </li>
+          <li
+            onClick={() => {
+              setActivePage("home");
+              setTimeout(() => scrollToSection("animals-section"), 100);
+            }}
+          >
+            Animals
+          </li>
 
-  <li
-    onClick={() => {
-      setActivePage("home");
-      setTimeout(() => scrollToSection("animals-section"), 100);
-    }}
-  >
-    Gallery
-  </li>
+          <li
+            onClick={() => {
+              setActivePage("home");
+              setTimeout(() => scrollToSection("animals-section"), 100);
+            }}
+          >
+            Gallery
+          </li>
 
-  <li onClick={() => setActivePage("facts")}>Fun Facts</li>
+          <li onClick={() => setActivePage("facts")}>Fun Facts</li>
 
-  <li onClick={() => setActivePage("games")}>Games</li>
+          <li onClick={() => setActivePage("games")}>Games</li>
 
-  <li onClick={() => setActivePage("favorites")}> Favorites</li>
+          <li onClick={() => setActivePage("favorites")}>
+            Favorites {favoriteCount > 0 ? `(${favoriteCount})` : ""}
+          </li>
 
-  <li onClick={() => setActivePage("details")}>Breed Info</li>
-</ul>      </nav>
+          <li onClick={() => setActivePage("details")}>Breed Info</li>
+        </ul>
+      </nav>
 
       {activePage === "home" && <HomePage />}
       {activePage === "facts" && <FunFactsPage />}
       {activePage === "games" && <GamesPage />}
       {activePage === "favorites" && <FavoritesPage />}
-      {activePage === "details" && <AnimalDetails />}    </div>
+      {activePage === "details" && <AnimalDetails />}
+    </div>
   );
 }
 

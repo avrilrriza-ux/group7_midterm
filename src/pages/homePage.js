@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetDogsQuery, useGetCatsQuery } from "../api/animalsApi";
+import { toggleFavorite } from "../app/favoritesSlice";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -8,6 +10,9 @@ function HomePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedAnimal, setSelectedAnimal] = useState(null);
+
+  const dispatch = useDispatch();
+  const favoriteItems = useSelector((state) => state.favorites.items);
 
   const categoryCards = [
     {
@@ -101,6 +106,21 @@ function HomePage() {
     });
   }
 
+  function isFavorite(animalId) {
+    return favoriteItems.some((item) => item.id === animalId);
+  }
+
+  function handleToggleFavorite(animal, e) {
+    e.stopPropagation();
+
+    dispatch(
+      toggleFavorite({
+        ...animal,
+        category: selectedCategory,
+      })
+    );
+  }
+
   return (
     <>
       <section id="hero" className="hero">
@@ -164,32 +184,32 @@ function HomePage() {
         </p>
 
         {selectedAnimal && (
-  <div className="modal-overlay" onClick={() => setSelectedAnimal(null)}>
-    <div className="animal-modal" onClick={(e) => e.stopPropagation()}>
-      <button
-        className="close-modal-btn"
-        onClick={() => setSelectedAnimal(null)}
-      >
-        ×
-      </button>
+          <div className="modal-overlay" onClick={() => setSelectedAnimal(null)}>
+            <div className="animal-modal" onClick={(e) => e.stopPropagation()}>
+              <button
+                className="close-modal-btn"
+                onClick={() => setSelectedAnimal(null)}
+              >
+                ×
+              </button>
 
-      <img
-        src={selectedAnimal.image}
-        alt={selectedAnimal.name}
-        className="modal-image"
-      />
+              <img
+                src={selectedAnimal.image}
+                alt={selectedAnimal.name}
+                className="modal-image"
+              />
 
-      <div className="modal-content">
-        <h2>{selectedAnimal.name}</h2>
-        <p><strong>Type:</strong> {selectedAnimal.type.toUpperCase()}</p>
-        <p><strong>Temperament:</strong> {selectedAnimal.temperament}</p>
-        <p><strong>Origin:</strong> {selectedAnimal.origin}</p>
-        <p><strong>Life Span:</strong> {selectedAnimal.lifeSpan}</p>
-        <p><strong>Description:</strong> {selectedAnimal.description}</p>
-      </div>
-    </div>
-  </div>
-)}
+              <div className="modal-content">
+                <h2>{selectedAnimal.name}</h2>
+                <p><strong>Type:</strong> {selectedAnimal.type?.toUpperCase() || "N/A"}</p>
+                <p><strong>Temperament:</strong> {selectedAnimal.temperament || "N/A"}</p>
+                <p><strong>Origin:</strong> {selectedAnimal.origin || "N/A"}</p>
+                <p><strong>Life Span:</strong> {selectedAnimal.lifeSpan || "N/A"}</p>
+                <p><strong>Description:</strong> {selectedAnimal.description || "N/A"}</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {selectedCategory && (
           <div className="search-wrap">
@@ -213,22 +233,29 @@ function HomePage() {
           <>
             <div className="animals-grid">
               {paginatedAnimals.map((animal) => (
-                <div key={animal.id}
-                    className="animal-card"
-                    onClick={() => setSelectedAnimal(animal)}>
+                <div
+                  key={animal.id}
+                  className="animal-card"
+                  onClick={() => setSelectedAnimal(animal)}
+                >
+                  <div className="animal-image-wrap">
+                    <button
+                      className="favorite-btn"
+                      onClick={(e) => handleToggleFavorite(animal, e)}
+                    >
+                      {isFavorite(animal.id) ? "❤" : "♡"}
+                    </button>
 
-                    <div className="animal-image-wrap">
                     <img
-                        src={animal.image}
-                        alt={animal.name}
-                        className="animal-image"
+                      src={animal.image}
+                      alt={animal.name}
+                      className="animal-image"
                     />
 
                     <div className="hover-overlay">
-                        View Details
+                      View Details
                     </div>
-                    </div>
-
+                  </div>
 
                   <div className="animal-card-body">
                     <h3>{animal.name}</h3>
