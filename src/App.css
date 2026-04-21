@@ -27,10 +27,11 @@ body {
 }
 
 .navbar {
+  font-weight: bold;
   display: flex;
   align-items: center;
   gap: 16px;
-  color: #fff8ef;
+  color: #3e2723;
   position: absolute;
   top: 20px;
   left: 20px;
