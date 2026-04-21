@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { useGetDogsQuery, useGetCatsQuery } from "../api/animalsApi";
-
 
 const MAX_QUESTIONS = 5;
 const TIME_PER_QUESTION = 5;
@@ -18,13 +17,11 @@ function GamesPage() {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [quizFinished, setQuizFinished] = useState(false);
   const [timeLeft, setTimeLeft] = useState(TIME_PER_QUESTION);
-  const winSoundRef = useRef(null);
-  const loseSoundRef = useRef(null);
   const [showCelebrate, setShowCelebrate] = useState(false);
-
   const correctSoundRef = useRef(null);
   const wrongSoundRef = useRef(null);
-  const timeoutSoundRef = useRef(null);
+
+
 
   const {
     data: dogAnimals = [],
@@ -42,13 +39,7 @@ function GamesPage() {
     return quizType === "dogs" ? dogAnimals : catAnimals;
   }, [quizType, dogAnimals, catAnimals]);
 
-  function playSound(soundRef) {
-    if (!soundRef.current) return;
-    soundRef.current.currentTime = 0;
-    soundRef.current.play().catch(() => {});
-  }
-
-  function generateQuestion() {
+  const generateQuestion = useCallback(() => {
     if (!activeAnimals || activeAnimals.length < 4) return;
 
     const shuffled = shuffleArray(activeAnimals);
@@ -73,13 +64,13 @@ function GamesPage() {
     setAnswerStatus("");
     setTimeLeft(TIME_PER_QUESTION);
     setShowCelebrate(false);
-  }
+  }, [activeAnimals]);
 
   useEffect(() => {
     if (activeAnimals.length >= 4) {
       generateQuestion();
     }
-  }, [activeAnimals]);
+  }, [activeAnimals, generateQuestion]);
 
   useEffect(() => {
     if (!currentQuestion || selectedAnswer || quizFinished) return;
@@ -87,7 +78,6 @@ function GamesPage() {
     if (timeLeft <= 0) {
       setSelectedAnswer("TIME_UP");
       setAnswerStatus("timeout");
-      playSound(timeoutSoundRef);
       setShowCelebrate(false);
       return;
     }
@@ -100,51 +90,44 @@ function GamesPage() {
   }, [timeLeft, currentQuestion, selectedAnswer, quizFinished]);
 
   useEffect(() => {
-    if (showCelebrate) {
-      const celebrationTimer = setTimeout(() => {
-        setShowCelebrate(false);
-      }, 1200);
+    if (!showCelebrate) return;
 
-      return () => clearTimeout(celebrationTimer);
-    }
+    const celebrationTimer = setTimeout(() => {
+      setShowCelebrate(false);
+    }, 1200);
+
+    return () => clearTimeout(celebrationTimer);
   }, [showCelebrate]);
 
-  function handleAnswerClick(option) {
-    if (selectedAnswer || !currentQuestion) return;
+function handleAnswerClick(option) {
+  if (selectedAnswer || !currentQuestion) return;
 
-    setSelectedAnswer(option);
+  setSelectedAnswer(option);
 
-    if (option === currentQuestion.correctAnswer) {
-      setAnswerStatus("correct");
-      setScore((prev) => prev + 1);
-      setShowCelebrate(true);
-      playSound(correctSoundRef);
-    } else {
-      setAnswerStatus("wrong");
-      setShowCelebrate(false);
-      playSound(wrongSoundRef);
-    }
+  if (option === currentQuestion.correctAnswer) {
+    setAnswerStatus("correct");
+    setScore((prev) => prev + 1);
+    setShowCelebrate(true);
+
+    correctSoundRef.current?.play().catch(() => {});
+  } else {
+    setAnswerStatus("wrong");
+    setShowCelebrate(false);
+
+    wrongSoundRef.current?.play().catch(() => {});
   }
-
-function handleNextQuestion() {
-  if (questionNumber >= MAX_QUESTIONS) {
-    setQuizFinished(true);
-
-    // PLAY SOUND BASED ON SCORE
-    setTimeout(() => {
-      if (score >= 3) {
-        winSoundRef.current?.play().catch(() => {});
-      } else {
-        loseSoundRef.current?.play().catch(() => {});
-      }
-    }, 300);
-
-    return;
-  }
-
-  setQuestionNumber((prev) => prev + 1);
-  generateQuestion();
 }
+
+  function handleNextQuestion() {
+    if (questionNumber >= MAX_QUESTIONS) {
+      setQuizFinished(true);
+
+      return;
+    }
+
+    setQuestionNumber((prev) => prev + 1);
+    generateQuestion();
+  }
 
   function handlePlayAgain() {
     setScore(0);
@@ -173,13 +156,11 @@ function handleNextQuestion() {
 
   return (
     <section className="games-section">
-      <audio ref={correctSoundRef} src="/sounds/correct.mp3" preload="auto" />
-      <audio ref={wrongSoundRef} src="/sounds/wrong.mp3" preload="auto" />
-      <audio ref={winSoundRef} src="/sounds/win.mp3" preload="auto" />
-      <audio ref={loseSoundRef} src="/sounds/lose.mp3" preload="auto" />
+        <audio ref={correctSoundRef} src="/sounds/correct.mp3" preload="auto" />
+        <audio ref={wrongSoundRef} src="/sounds/wrong.mp3" preload="auto" />
 
       <div className="games-header">
-        <h2>Guess the Breed </h2>
+        <h2>Guess the Breed 🎮</h2>
         <p>Look at the pet image and choose the correct breed.</p>
       </div>
 
