@@ -130,7 +130,7 @@ function handleNextQuestion() {
   if (questionNumber >= MAX_QUESTIONS) {
     setQuizFinished(true);
 
-    // 🎯 PLAY SOUND BASED ON SCORE
+    // PLAY SOUND BASED ON SCORE
     setTimeout(() => {
       if (score >= 3) {
         winSoundRef.current?.play().catch(() => {});
@@ -217,7 +217,7 @@ function handleNextQuestion() {
       {!loading && !error && quizFinished && (
         <div className="quiz-card">
           <div className="quiz-content" style={{ width: "100%" }}>
-            <h3>{score >= 3 ? "Great Job! 🎉🐾" : "Better Luck Next Time 😅"}</h3>
+            <h3>{score >= 3 ? "Great Job! 🎉" : "Better Luck Next Time 😅"}</h3>
             <p className="quiz-feedback">
               You got <strong>{score}</strong> out of <strong>{MAX_QUESTIONS}</strong>.
             </p>
@@ -244,7 +244,7 @@ function handleNextQuestion() {
 
             {showCelebrate && (
               <div className="celebration-banner">
-                Correct! 🎉🐾✨
+                Correct! 🎉
               </div>
             )}
 

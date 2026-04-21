@@ -875,25 +875,27 @@ body {
 
 .breed-top-bar {
   max-width: 1200px;
-  margin: 0 auto 10px;
+  margin: 20px auto 10px;
+  padding: 0 20px;
   display: flex;
   justify-content: flex-start;
 }
 
 .back-btn {
-  border: 1px solid #e3c59d;
-  background: #f2e4cf;
-  color: #6f4c2d;
-  padding: 12px 20px;
+  background: #ead7c3;
+  color: #7a4b21;
+  border: 1px solid #d7b893;
+  padding: 12px 22px;
   border-radius: 999px;
-  cursor: pointer;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
+  cursor: pointer;
   transition: 0.2s ease;
 }
 
 .back-btn:hover {
-  background: #ead6b9;
+  background: #e2ccb4;
+  transform: translateY(-1px);
 }
 
 .search-box {
