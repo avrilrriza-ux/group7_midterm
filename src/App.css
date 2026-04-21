@@ -51,6 +51,28 @@ body {
   font-size: 11px;
 }
 
+.nav-links a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-links a:visited {
+  color: inherit;
+}
+
+.nav-links a:hover {
+  color: 
+}
+
+.nav-links li {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-links li:hover {
+  transform: scale(1.05);
+}
+
 .hero-content {
   position: relative;
   min-height: 520px;

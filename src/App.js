@@ -1,87 +1,70 @@
-import { useState } from "react";
 import "./App.css";
+import { useSelector } from "react-redux";
+import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
+
 import HomePage from "./pages/homePage";
 import AnimalDetails from "./pages/AnimalDetails";
 import FunFactsPage from "./pages/FunFactsPage";
 import GamesPage from "./pages/GamesPage";
 import FavoritesPage from "./pages/FavoritesPage";
-import { useSelector } from "react-redux";
 
 function App() {
-  const [activePage, setActivePage] = useState("home");
   const favoriteCount = useSelector((state) => state.favorites.items.length);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  function scrollToSection(id) {
-    const section = document.getElementById(id);
+  function goToHomeSection(id) {
+    if (location.pathname !== "/") {
+      navigate("/");
 
-    if (section) {
-      section.scrollIntoView({
-        behavior: "smooth",
-      });
+      setTimeout(() => {
+        const section = document.getElementById(id);
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 150);
+    } else {
+      const section = document.getElementById(id);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      }
     }
   }
 
   return (
     <div className="app">
       <nav className="navbar">
-        <div className="brand" onClick={() => setActivePage("home")}>
-          🐾
-        </div>
-
         <ul className="nav-links">
-          <li
-            onClick={() => {
-              setActivePage("home");
-              setTimeout(() => scrollToSection("hero"), 100);
-            }}
-          >
-            Home
+          <li onClick={() => goToHomeSection("hero")}>Home</li>
+          <li onClick={() => goToHomeSection("categories-section")}>Categories</li>
+          <li onClick={() => goToHomeSection("animals-section")}>Animals</li>
+          <li onClick={() => goToHomeSection("animals-section")}>Gallery</li>
+
+          <li>
+            <Link to="/facts">Fun Facts</Link>
           </li>
 
-          <li
-            onClick={() => {
-              setActivePage("home");
-              setTimeout(() => scrollToSection("categories-section"), 100);
-            }}
-          >
-            Categories
+          <li>
+            <Link to="/games">Games</Link>
           </li>
 
-          <li
-            onClick={() => {
-              setActivePage("home");
-              setTimeout(() => scrollToSection("animals-section"), 100);
-            }}
-          >
-            Animals
+          <li>
+            <Link to="/favorites">Favorites ({favoriteCount})</Link>
           </li>
 
-          <li
-            onClick={() => {
-              setActivePage("home");
-              setTimeout(() => scrollToSection("animals-section"), 100);
-            }}
-          >
-            Gallery
+          <li>
+            <Link to="/details">Breed Info</Link>
           </li>
-
-          <li onClick={() => setActivePage("facts")}>Fun Facts</li>
-
-          <li onClick={() => setActivePage("games")}>Games</li>
-
-          <li onClick={() => setActivePage("favorites")}>
-            Favorites {favoriteCount > 0 ? `(${favoriteCount})` : ""}
-          </li>
-
-          <li onClick={() => setActivePage("details")}>Breed Info</li>
         </ul>
       </nav>
 
-      {activePage === "home" && <HomePage />}
-      {activePage === "facts" && <FunFactsPage />}
-      {activePage === "games" && <GamesPage />}
-      {activePage === "favorites" && <FavoritesPage />}
-      {activePage === "details" && <AnimalDetails />}
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/facts" element={<FunFactsPage />} />
+        <Route path="/games" element={<GamesPage />} />
+        <Route path="/favorites" element={<FavoritesPage />} />
+        <Route path="/details" element={<AnimalDetails />} />
+      </Routes>
     </div>
   );
 }
